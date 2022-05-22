@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { QuizService } from '../../services/quiz.service';
-import { QuizStateInterface } from '../../types/quiz.interface';
 
 @Component({
   selector: 'app-quiz',
@@ -21,9 +20,7 @@ export class QuizComponent implements OnInit {
       .pipe(map((state) => state.questions.length));
 
     this.currentQuestionIndex$ = this.quizService.getState().pipe(
-      tap((res) => console.log('INITIAL', res.currentQuestionIndex)),
       map((state) => state.currentQuestionIndex),
-      tap((res) => console.log('AFTER', res))
     );
 
     this.showResults$ = this.quizService
@@ -39,7 +36,6 @@ export class QuizComponent implements OnInit {
 
   nextQuestion() {
     this.quizService.nextQuestion();
-    // console.log("SHOW", this.quizService.getState())
   }
 
   restart() {

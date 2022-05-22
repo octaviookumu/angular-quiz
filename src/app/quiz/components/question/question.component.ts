@@ -7,11 +7,8 @@ import {
 import {
   map,
   Observable,
-  of,
   Subject,
-  Subscription,
   takeUntil,
-  tap,
 } from 'rxjs';
 import { QuizService } from '../../services/quiz.service';
 import { AnswerType } from '../../types/answer.type';
@@ -65,7 +62,15 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   isCorrectAnswer(answer: AnswerType): boolean {
-    if (!this.currentAnswer || this.correctAnswer) {
+    if (!this.currentAnswer || !this.correctAnswer) {
+      return false;
+    }
+    let value = Boolean(this.currentAnswer) && answer === this.correctAnswer;
+    return value;
+  }
+
+  isWrongAnswer(answer: AnswerType): boolean {
+    if (!this.currentAnswer || !this.correctAnswer) {
       return false;
     }
     return (
@@ -73,17 +78,10 @@ export class QuestionComponent implements OnInit, OnDestroy {
     );
   }
 
-  isWrongAnswer(answer: AnswerType): boolean {
-    if (!this.currentAnswer || this.correctAnswer) {
+  isDisabledAnswer(answer: AnswerType): boolean {
+    if (!this.currentAnswer || !this.correctAnswer) {
       return false;
     }
     return Boolean(this.currentAnswer);
-  }
-
-  isDisabledAnswer(answer: AnswerType): boolean {
-    if (!this.currentAnswer || this.correctAnswer) {
-      return false;
-    }
-    return Boolean(this.currentAnswer) && answer === this.correctAnswer;
   }
 }

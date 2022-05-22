@@ -51,11 +51,8 @@ export class QuizService {
       currentQuestionIndex: newCurrentQuestionIndex,
       showResults: newShowResults,
       answers: newAnswers,
+      currentAnswer: null,
     });
-
-    // console.log("currentIndex", this.state$.getValue().currentQuestionIndex)
-    // console.log("QUESTIONS LENGTH", state.questions.length)
-    // console.log("SHOW", state.showResults)
   }
 
   shuffleAnswers(question: QuestionInterface): AnswerType[] {
@@ -78,7 +75,14 @@ export class QuizService {
   }
 
   selectAnswer(answer: AnswerType) {
-    console.log("ANSWER", answer)
-    this.setState({ currentAnswer: answer })
+    const state = this.state$.getValue();
+    const newCorrectAnswerCount =
+      answer === state.questions[state.currentQuestionIndex - 1].correctAnswer
+        ? state.correctAnswerCount + 1
+        : state.correctAnswerCount;
+    this.setState({
+      currentAnswer: answer,
+      correctAnswerCount: newCorrectAnswerCount,
+    });
   }
 }

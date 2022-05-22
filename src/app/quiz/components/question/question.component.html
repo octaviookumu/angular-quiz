@@ -8,10 +8,12 @@
         [index]="i"
         class="answer"
         (selectAnswer)="selectAnswer($event)"
-        [ngClass]="{answer: true,
-            'correct-answer': isCorrectAnswer(answer),
-            'wrong-answer': isWrongAnswer(answer), 
-            'disabled-answer': isDisabledAnswer(answer) }"
+        [ngClass]="{
+          answer: true,
+          'correct-answer': isCorrectAnswer(answer),
+          'wrong-answer': isWrongAnswer(answer),
+          'disabled-answer': isDisabledAnswer(answer)
+        }"
       ></app-answer>
     </div>
   </ng-container>
