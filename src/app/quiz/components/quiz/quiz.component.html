@@ -1,3 +1,4 @@
+<h1 *ngIf="(questionsLength$ | async) === 0">Loading...</h1>
 <div class="quiz">
   <div *ngIf="showResults$ | async">
     <div class="results">

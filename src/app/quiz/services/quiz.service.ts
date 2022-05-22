@@ -8,13 +8,13 @@ import { AnswerType } from '../types/answer.type';
 import { HttpClient } from '@angular/common/http';
 import { BackendQuestionInterface } from '../types/backendquestion.interface';
 
-import { environment } from '../../../environments/environment'
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuizService {
-  apiUrl = environment.apiUrl
+  apiUrl = environment.apiUrl;
 
   initialState: QuizStateInterface = {
     // questions: mockData,
