@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!(showResults$ | async)">
+  <div *ngIf="!(showResults$ | async) && (questionsLength$ | async)">
     <div class="score">
       Question {{ currentQuestionIndex$ | async }} /
       {{ questionsLength$ | async }}
