@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { QuizStateInterface } from '../types/quiz.interface';
-import mockData from '../data';
+// import mockData from '../data';
 import { QuestionInterface } from '../types/question.interface';
 import { AnswerType } from '../types/answer.type';
 
 import { HttpClient } from '@angular/common/http';
 import { BackendQuestionInterface } from '../types/backendquestion.interface';
 
+import { environment } from '../../../environments/environment'
+
 @Injectable({
   providedIn: 'root',
 })
 export class QuizService {
-  apiUrl =
-    'https://opentdb.com/api.php?amount=10&category=31&difficulty=medium&type=multiple&encode=url3986';
+  apiUrl = environment.apiUrl
 
   initialState: QuizStateInterface = {
     // questions: mockData,
