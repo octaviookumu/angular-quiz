@@ -101,7 +101,7 @@ export class QuizService {
   ): QuestionInterface[] {
     return backendQuestions.map((backendQuestion) => {
       const incorrectAnswers = backendQuestion.incorrect_answers.map(
-        (backendIncorrectAnswer) => decodeURIComponent(backendIncorrectAnswer)
+        (backendIncorrectAnswer: any) => decodeURIComponent(backendIncorrectAnswer)
       );
 
       return {
