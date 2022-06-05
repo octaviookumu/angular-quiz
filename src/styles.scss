@@ -111,3 +111,59 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@media only screen and (max-width: 600px) {
+  .quiz {
+    padding: 1rem;
+  }
+
+  .score {
+    font-size: 1rem;
+    height: 30px;
+    margin-bottom: 15px;
+  }
+
+  .question {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: repeat(1, auto);
+    grid-template-rows: repeat(4, auto);
+    gap: 1rem;
+    margin: 1rem 0;
+
+    .answer {
+      display: flex;
+      border: 2px solid #0693dc;
+      cursor: pointer;
+
+      .answer-div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        background: #fff;
+
+        .answer-letter {
+          padding: 0.6rem;
+          margin: 0.05rem;
+          font-size: 1rem;
+        }
+
+        .answer-text {
+          font-size: 0.9rem;
+          padding: .2rem .5rem;
+        }
+      }
+    }
+  }
+
+  .next-button {
+    width: 50%;
+    margin: 1.5rem auto;
+    padding: 0.6rem 1rem;
+  }
+}
