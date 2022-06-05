@@ -1,3 +1,7 @@
+<div class="loader" *ngIf="(questionsLength$ | async) === 0">
+  <h1>Loading...</h1>
+  <img src="../../../../assets/images/jabber.png" alt="" />
+</div>
 <div class="quiz">
   <div *ngIf="showResults$ | async">
     <div class="results">
@@ -12,13 +16,12 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!(showResults$ | async)">
+  <div *ngIf="!(showResults$ | async) && (questionsLength$ | async)">
     <div class="score">
       Question {{ currentQuestionIndex$ | async }} /
       {{ questionsLength$ | async }}
     </div>
     <app-question></app-question>
     <div class="next-button" (click)="nextQuestion()">Next Question</div>
-    <div></div>
   </div>
 </div>

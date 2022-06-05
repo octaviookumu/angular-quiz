@@ -1,27 +1,35 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { QuizStateInterface } from '../types/quiz.interface';
-import mockData from '../data';
+// import mockData from '../data';
 import { QuestionInterface } from '../types/question.interface';
 import { AnswerType } from '../types/answer.type';
+
+import { HttpClient } from '@angular/common/http';
+import { BackendQuestionInterface } from '../types/backendquestion.interface';
+
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuizService {
+  apiUrl = environment.apiUrl;
+
   initialState: QuizStateInterface = {
-    questions: mockData,
+    // questions: mockData,
+    questions: [],
     currentQuestionIndex: 1,
     showResults: false,
     correctAnswerCount: 0,
-    answers: this.shuffleAnswers(mockData[0]),
+    answers: [],
     currentAnswer: null,
   };
 
   state$: BehaviorSubject<QuizStateInterface> =
     new BehaviorSubject<QuizStateInterface>({ ...this.initialState });
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   getState(): Observable<QuizStateInterface> {
     return this.state$.asObservable();
@@ -51,11 +59,8 @@ export class QuizService {
       currentQuestionIndex: newCurrentQuestionIndex,
       showResults: newShowResults,
       answers: newAnswers,
+      currentAnswer: null,
     });
-
-    // console.log("currentIndex", this.state$.getValue().currentQuestionIndex)
-    // console.log("QUESTIONS LENGTH", state.questions.length)
-    // console.log("SHOW", state.showResults)
   }
 
   shuffleAnswers(question: QuestionInterface): AnswerType[] {
@@ -75,10 +80,53 @@ export class QuizService {
 
   restart() {
     this.setState(this.initialState);
+    this.getQuestions();
   }
 
   selectAnswer(answer: AnswerType) {
-    console.log("ANSWER", answer)
-    this.setState({ currentAnswer: answer })
+    const state = this.state$.getValue();
+    const newCorrectAnswerCount =
+      answer === state.questions[state.currentQuestionIndex - 1].correctAnswer
+        ? state.correctAnswerCount + 1
+        : state.correctAnswerCount;
+    this.setState({
+      currentAnswer: answer,
+      correctAnswerCount: newCorrectAnswerCount,
+    });
+  }
+
+  // remove the extra signs in the fetched data
+  normalizeQuestions(
+    backendQuestions: BackendQuestionInterface[]
+  ): QuestionInterface[] {
+    return backendQuestions.map((backendQuestion) => {
+      const incorrectAnswers = backendQuestion.incorrect_answers.map(
+        (backendIncorrectAnswer) => decodeURIComponent(backendIncorrectAnswer)
+      );
+
+      return {
+        question: decodeURIComponent(backendQuestion.question),
+        correctAnswer: decodeURIComponent(backendQuestion.correct_answer),
+        incorrectAnswers,
+      };
+    });
+  }
+
+  getQuestions(): void {
+    this.http
+      .get<{ results: BackendQuestionInterface[] }>(this.apiUrl)
+      .pipe(map((response) => response.results))
+      .subscribe((questions) => this.loadQuestions(questions));
+  }
+
+  loadQuestions(backendQuestions: BackendQuestionInterface[]) {
+    const normalizedQuestions = this.normalizeQuestions(backendQuestions);
+    const initialAnswers = this.shuffleAnswers(normalizedQuestions[0]);
+    this.setState({
+      questions: normalizedQuestions,
+      answers: initialAnswers,
+    });
   }
 }
+
+// TODO: Add interceptor and loading status when getQuestions is fetching

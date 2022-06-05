@@ -18,8 +18,6 @@ export class AnswerComponent implements OnInit {
   @Input('answerText') answerTextProps!: string;
   @Input('index') indexProps!: number;
   @Output('selectAnswer') selectAnswerEvent = new EventEmitter<AnswerType>();
-  // @Input('correctAnswer') correctAnswerProps!: AnswerType | null;
-  // @Input('currentAnswer') currentAnswerProps!: AnswerType | null;
 
   letterMapping: string[] = ['A', 'B', 'C', 'D'];
 
@@ -32,7 +30,6 @@ export class AnswerComponent implements OnInit {
   }
 
   selectAnswer() {
-    // console.log("CLICKED")
     this.selectAnswerEvent.emit(this.answerTextProps);
   }
 }
